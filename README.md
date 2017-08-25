@@ -6,8 +6,8 @@ This library allows for cross-browser image downscaling and resizing utilizing `
 
 ## Installation
 
-`npm install browser-image-resizer`
-`yarn add browser-image-resizer`
+* `npm install browser-image-resizer`
+* `yarn add browser-image-resizer`
 
 ## Usage
 
