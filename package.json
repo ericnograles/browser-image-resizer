@@ -1,0 +1,11 @@
+{
+  "name": "browser-image-resizer",
+  "version": "1.0.0",
+  "description": "A browser-based utility to downscale and resize images using <canvas>",
+  "main": "build/index.js",
+  "author": "Eric Nograles <grales@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-cli": "^6.26.0"
+  }
+}
