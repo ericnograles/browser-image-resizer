@@ -11,8 +11,10 @@ This library allows for cross-browser image downscaling and resizing utilizing `
 
 ## Usage
 
-`import readAndCompressImage from 'browser-image-resizer';`
-`readAndCompressImage(file, config)`
+```javascript
+import readAndCompressImage from 'browser-image-resizer';
+readAndCompressImage(file, config)
+```
 
 ### readAndCompressImage(file, config) => Promise<Blob>
 
