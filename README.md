@@ -26,9 +26,7 @@ readAndCompressImage(file, config)
     // Upload file to some Web API
     const url = `http://localhost:3001/upload`;
     const formData = new FormData();
-    for (var i = 0; i < files.length; i++) {
-      formData.append('images', resizedImage);
-    }
+    formData.append('images', resizedImage);
     const options = {
       method: 'POST',
       body: formData
@@ -60,9 +58,7 @@ async function uploadImage(file) {
 
     const url = `http://localhost:3001/upload`;
     const formData = new FormData();
-    for (var i = 0; i < files.length; i++) {
-      formData.append('images', resizedImage);
-    }
+    formData.append('images', resizedImage);
     const options = {
       method: 'POST',
       body: formData
