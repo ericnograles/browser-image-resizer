@@ -1,6 +1,6 @@
 {
   "name": "browser-image-resizer",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A browser-based utility to downscale and resize images using <canvas>",
   "main": "build/index.js",
   "author": "Eric Nograles <grales@gmail.com>",
