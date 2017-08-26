@@ -9,11 +9,75 @@ This library allows for cross-browser image downscaling and resizing utilizing `
 * `npm install browser-image-resizer`
 * `yarn add browser-image-resizer`
 
-## Usage
+## Sample - Promises
 
 ```javascript
 import readAndCompressImage from 'browser-image-resizer';
+
+const config = {
+  quality: 0.7,
+  width: 800,
+  height: 600
+};
+
+// Note: A single file comes from event.target.files on <input>
 readAndCompressImage(file, config)
+  .then(resizedImage => {
+    // Upload file to some Web API
+    const url = `http://localhost:3001/upload`;
+    const formData = new FormData();
+    for (var i = 0; i < files.length; i++) {
+      formData.append('images', resizedImage);
+    }
+    const options = {
+      method: 'POST',
+      body: formData
+    };
+
+    return fetch(url, options);
+  })
+  .then(result => {
+    // TODO: Handle the result
+    console.log(result);
+  });
+```
+
+## Sample - Async/Await
+
+```javascript
+import readAndCompressImage from 'browser-image-resizer';
+
+const config = {
+  quality: 0.7,
+  width: 800,
+  height: 600
+};
+
+// Note: A single file comes from event.target.files on <input>
+async function uploadImage(file) {
+  try {
+    let resizedImage = await readAndCompressImage(file, config);
+
+    const url = `http://localhost:3001/upload`;
+    const formData = new FormData();
+    for (var i = 0; i < files.length; i++) {
+      formData.append('images', resizedImage);
+    }
+    const options = {
+      method: 'POST',
+      body: formData
+    };
+
+    let result = await fetch(url, options);
+
+    // TODO: Handle the result
+    console.log(result);
+    return result;
+  } catch (error) {
+    console.error(error);
+    throw(error);
+  }
+}
 ```
 
 ### readAndCompressImage(file, config) => Promise<Blob>
