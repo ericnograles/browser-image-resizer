@@ -1,11 +1,11 @@
-import 'exif-js';
+import EXIF from 'exif-js';
 
 const DEFAULT_CONFIG = {
   quality: 0.5,
   maxWidth: 800,
   maxHeight: 600,
   autoRotate: true,
-  debug: false
+  debug: true
 };
 
 export default function readAndCompressImage(file, userConfig) {
@@ -17,9 +17,6 @@ export default function readAndCompressImage(file, userConfig) {
     reader.onload = function(e) {
       img.src = e.target.result;
       img.onload = function() {
-        // //Rotate image first if required
-        // resolve(scaleImage(img, config));
-
         if (config.autoRotate) {
           if (config.debug)
             console.log('browser-image-resizer: detecting image orientation...');
@@ -27,7 +24,9 @@ export default function readAndCompressImage(file, userConfig) {
             typeof EXIF.getData === 'function' &&
             typeof EXIF.getTag === 'function'
           ) {
+            debugger;
             EXIF.getData(img, function() {
+              debugger;
               var orientation = EXIF.getTag(this, 'Orientation');
               if (config.debug) {
                 console.log(
@@ -55,7 +54,6 @@ export function scaleImage(img, config, orientation = 1) {
   var canvas = document.createElement('canvas');
   canvas.width = img.width;
   canvas.height = img.height;
-  // canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
   var ctx = canvas.getContext('2d');
   ctx.save();
 
