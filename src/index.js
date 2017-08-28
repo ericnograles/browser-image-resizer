@@ -1,19 +1,47 @@
 const DEFAULT_CONFIG = {
   quality: 0.5,
   maxWidth: 800,
-  maxHeight: 600
+  maxHeight: 600,
+  autoRotate: true,
+  debug: false
 };
 
-export default function readAndCompressImage(file, config = DEFAULT_CONFIG) {
+export default function readAndCompressImage(file, userConfig) {
   return new Promise(resolve => {
     var img = document.createElement('img');
     var reader = new FileReader();
+    var config = Object.assign({}, DEFAULT_CONFIG, userConfig);
 
     reader.onload = function(e) {
       img.src = e.target.result;
       img.onload = function() {
-        //Rotate image first if required
-        resolve(scaleImage(img, config));
+        // //Rotate image first if required
+        // resolve(scaleImage(img, config));
+
+        if (config.autoRotate) {
+          if (config.debug)
+            console.log('browser-image-resizer: detecting image orientation...');
+          if (
+            typeof EXIF.getData === 'function' &&
+            typeof EXIF.getTag === 'function'
+          ) {
+            EXIF.getData(img, function() {
+              var orientation = EXIF.getTag(this, 'Orientation');
+              if (config.debug) {
+                console.log(
+                  'browser-image-resizer: image orientation from EXIF tag = ' +
+                    orientation
+                );
+              }
+              resolve(scaleImage(img, config, orientation));
+            });
+          } else {
+            console.error(
+              "browser-image-resizer: can't read EXIF data, the Exif.js library not found"
+            );
+            resolve (scaleImage(img, config));
+          }
+        }
       };
     };
 
@@ -21,21 +49,118 @@ export default function readAndCompressImage(file, config = DEFAULT_CONFIG) {
   });
 }
 
-export function scaleImage(img, config) {
+export function scaleImage(img, config, orientation = 1) {
   var canvas = document.createElement('canvas');
   canvas.width = img.width;
   canvas.height = img.height;
-  canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+  // canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+  var ctx = canvas.getContext('2d');
+  ctx.save();
 
-  while (canvas.width >= 2 * config.maxWidth) {
+  // EXIF
+  exifApplied(canvas, ctx, orientation);
+
+  let maxWidth = findMaxWidth(config, canvas);
+
+  while (canvas.width >= 2 * maxWidth) {
     canvas = getHalfScaleCanvas(canvas);
   }
 
-  if (canvas.width > config.maxWidth) {
+  if (canvas.width > maxWidth) {
     canvas = scaleCanvasWithAlgorithm(canvas, config);
   }
 
-  return dataURIToBlob(canvas.toDataURL('image/jpeg', config.quality));
+  let imageData = canvas.toDataURL('image/jpeg', config.quality);
+  if (typeof config.onScale === 'function') config.onScale(imageData);
+  return dataURIToBlob(imageData);
+}
+
+function findMaxWidth(config, canvas) {
+  //Let's find the max available width for scaled image
+  var ratio = canvas.width / canvas.height;
+  var mWidth = Math.min(config.maxWidth, ratio * config.maxHeight);
+  if (
+    config.maxSize > 0 &&
+    config.maxSize < canvas.width * canvas.height / 1000
+  )
+    mWidth = Math.min(
+      mWidth,
+      Math.floor(Math.sqrt(config.maxSize * ratio))
+    );
+  if (!!config.scaleRatio)
+    mWidth = Math.min(
+      mWidth,
+      Math.floor(config.scaleRatio * canvas.width)
+    );
+
+  if (config.debug) {
+    console.log(
+      'browser-image-resizer: original image size = ' +
+        canvas.width +
+        ' px (width) X ' +
+        canvas.height +
+        ' px (height)'
+    );
+    console.log(
+      'browser-image-resizer: scaled image size = ' +
+        mWidth +
+        ' px (width) X ' +
+        Math.floor(mWidth / ratio) +
+        ' px (height)'
+    );
+  }
+  if (mWidth <= 0) {
+    mWidth = 1;
+    console.warning('browser-image-resizer: image size is too small');
+  }
+
+  return mWidth;
+}
+
+function exifApplied(canvas, ctx, orientation) {
+  var width = canvas.width;
+  var styleWidth = canvas.style.width;
+  var height = canvas.height;
+  var styleHeight = canvas.style.height;
+  if (orientation > 4) {
+    canvas.width = height;
+    canvas.style.width = styleHeight;
+    canvas.height = width;
+    canvas.style.height = styleWidth;
+  }
+  switch (orientation) {
+    case 2:
+      ctx.translate(width, 0);
+      ctx.scale(-1, 1);
+      break;
+    case 3:
+      ctx.translate(width, height);
+      ctx.rotate(Math.PI);
+      break;
+    case 4:
+      ctx.translate(0, height);
+      ctx.scale(1, -1);
+      break;
+    case 5:
+      ctx.rotate(0.5 * Math.PI);
+      ctx.scale(1, -1);
+      break;
+    case 6:
+      ctx.rotate(0.5 * Math.PI);
+      ctx.translate(0, -height);
+      break;
+    case 7:
+      ctx.rotate(0.5 * Math.PI);
+      ctx.translate(width, -height);
+      ctx.scale(-1, 1);
+      break;
+    case 8:
+      ctx.rotate(-0.5 * Math.PI);
+      ctx.translate(-width, 0);
+      break;
+  }
+  ctx.drawImage(img, 0, 0);
+  ctx.restore();
 }
 
 function dataURIToBlob(dataURI) {
