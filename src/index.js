@@ -1,3 +1,5 @@
+import 'exif-js';
+
 const DEFAULT_CONFIG = {
   quality: 0.5,
   maxWidth: 800,
