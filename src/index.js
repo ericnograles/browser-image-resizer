@@ -1,4 +1,4 @@
-import EXIF from 'exif-js';
+import EXIF from './exif';
 
 const DEFAULT_CONFIG = {
   quality: 0.5,
@@ -58,7 +58,7 @@ export function scaleImage(img, config, orientation = 1) {
   ctx.save();
 
   // EXIF
-  exifApplied(canvas, ctx, orientation);
+  exifApplied(canvas, ctx, orientation, img);
 
   let maxWidth = findMaxWidth(config, canvas);
 
@@ -117,7 +117,7 @@ function findMaxWidth(config, canvas) {
   return mWidth;
 }
 
-function exifApplied(canvas, ctx, orientation) {
+function exifApplied(canvas, ctx, orientation, img) {
   var width = canvas.width;
   var styleWidth = canvas.style.width;
   var height = canvas.height;
