@@ -4,6 +4,10 @@
 
 This library allows for cross-browser image downscaling and resizing utilizing `<canvas>`. The code was part of Ross Turner's [HTML5-ImageUploader](https://github.com/rossturner/HTML5-ImageUploader).  Note that this is meant to be a browser-only utility and will not work in Node.js.
 
+## Demo
+
+[https://browser-image-resizer-test.firebaseapp.com/](https://browser-image-resizer-test.firebaseapp.com/)
+
 ## Installation
 
 * `npm install browser-image-resizer`
@@ -15,9 +19,11 @@ This library allows for cross-browser image downscaling and resizing utilizing `
 import readAndCompressImage from 'browser-image-resizer';
 
 const config = {
-  quality: 0.7,
-  width: 800,
-  height: 600
+  quality: 0.5,
+  maxWidth: 800,
+  maxHeight: 600,
+  autoRotate: true,
+  debug: true
 };
 
 // Note: A single file comes from event.target.files on <input>
@@ -88,6 +94,8 @@ async function uploadImage(file) {
 | `quality`      | The quality of the JPEG | 0.5 |
 | `maxWidth`      | The maximum width for the downscaled image | 800 |
 | `maxHeight` | The maximum height for the downscaled image | 600 |
+| `autoRotate` | Reads EXIF data on the image to determine orientation | true |
+| `debug` | console.log image update operations | true |
 
 ### Outputs
 
