@@ -95,7 +95,7 @@ async function uploadImage(file) {
 | `maxWidth`      | The maximum width for the downscaled image | 800 |
 | `maxHeight` | The maximum height for the downscaled image | 600 |
 | `autoRotate` | Reads EXIF data on the image to determine orientation | true |
-| `debug` | console.log image update operations | true |
+| `debug` | console.log image update operations | false |
 
 ### Outputs
 

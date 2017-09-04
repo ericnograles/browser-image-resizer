@@ -5,7 +5,7 @@ const DEFAULT_CONFIG = {
   maxWidth: 800,
   maxHeight: 600,
   autoRotate: true,
-  debug: true
+  debug: false
 };
 
 export default function readAndCompressImage(file, userConfig) {
