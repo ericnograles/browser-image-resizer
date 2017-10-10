@@ -24,9 +24,7 @@ export default function readAndCompressImage(file, userConfig) {
             typeof EXIF.getData === 'function' &&
             typeof EXIF.getTag === 'function'
           ) {
-            debugger;
             EXIF.getData(img, function() {
-              debugger;
               var orientation = EXIF.getTag(this, 'Orientation');
               if (config.debug) {
                 console.log(
