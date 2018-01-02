@@ -76,14 +76,14 @@ scaleImage = scaleImage;var _exif = require('./exif');var _exif2 = _interopRequi
 function findMaxWidth(config, canvas) {
   //Let's find the max available width for scaled image
   var ratio = canvas.width / canvas.height;
-  var mWidth = Math.min(config.maxWidth, ratio * config.maxHeight);
+  var mWidth = Math.min(canvas.width, config.maxWidth, ratio * config.maxHeight);
   if (
   config.maxSize > 0 &&
   config.maxSize < canvas.width * canvas.height / 1000)
 
   mWidth = Math.min(
   mWidth,
-  Math.floor(Math.sqrt(config.maxSize * ratio)));
+  Math.floor(config.maxSize * 1000 / canvas.height));
 
   if (!!config.scaleRatio)
   mWidth = Math.min(
