@@ -65,7 +65,7 @@ scaleImage = scaleImage;var _exif = require('./exif');var _exif2 = _interopRequi
   }
 
   if (canvas.width > maxWidth) {
-    canvas = scaleCanvasWithAlgorithm(canvas, config);
+    canvas = scaleCanvasWithAlgorithm(canvas, Object.assign(config, { outputWidth: maxWidth }));
   }
 
   var imageData = canvas.toDataURL('image/jpeg', config.quality);
@@ -188,7 +188,7 @@ function dataURIToBlob(dataURI) {
 function scaleCanvasWithAlgorithm(canvas, config) {
   var scaledCanvas = document.createElement('canvas');
 
-  var scale = config.maxWidth / canvas.width;
+  var scale = config.outputWidth / canvas.width;
 
   scaledCanvas.width = canvas.width * scale;
   scaledCanvas.height = canvas.height * scale;
