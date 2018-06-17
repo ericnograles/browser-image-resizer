@@ -5,7 +5,8 @@ const DEFAULT_CONFIG = {
   maxWidth: 800,
   maxHeight: 600,
   autoRotate: true,
-  debug: false
+  debug: false,
+  mimeType: 'image/jpeg'
 };
 
 export default function readAndCompressImage(file, userConfig) {
@@ -68,7 +69,7 @@ export function scaleImage(img, config, orientation = 1) {
     canvas = scaleCanvasWithAlgorithm(canvas, Object.assign(config, { outputWidth: maxWidth }));
   }
 
-  let imageData = canvas.toDataURL('image/jpeg', config.quality);
+  let imageData = canvas.toDataURL(config.mimeType, config.quality);
   if (typeof config.onScale === 'function') config.onScale(imageData);
   return dataURIToBlob(imageData);
 }
