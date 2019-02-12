@@ -5,7 +5,9 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'index.js',
-    libraryExport: 'default'
+    library: 'browser-image-resizer',
+    libraryTarget: 'umd',
+    umdNamedDefine: true
   },
   module: {
     rules: [

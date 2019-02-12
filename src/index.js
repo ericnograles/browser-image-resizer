@@ -9,7 +9,7 @@ const DEFAULT_CONFIG = {
   mimeType: 'image/jpeg'
 };
 
-function readAndCompressImage(file, userConfig) {
+export function readAndCompressImage(file, userConfig) {
   return new Promise(resolve => {
     var img = document.createElement('img');
     var reader = new FileReader();
@@ -296,8 +296,4 @@ function applyBilinearInterpolation(srcCanvasData, destCanvasData, scale) {
       destCanvasData.data[idxD + 3] = a;
     }
   }
-}
-
-export default {
-  readAndCompressImage
 }
