@@ -6,7 +6,9 @@ This library allows for cross-browser image downscaling and resizing utilizing `
 
 ## Demo
 
-[https://browser-image-resizer-test.firebaseapp.com/](https://browser-image-resizer-test.firebaseapp.com/)
+- [Code Sandbox - NPM](https://codesandbox.io/s/6x20vw7l4r)
+- [Code Sandbox - In-Browser](https://codesandbox.io/s/nroxwpn21p)
+
 
 ## Installation
 
@@ -181,4 +183,4 @@ async function uploadImage(file) {
 
 ### Outputs
 
-A Promise that yields a JPEG Blob
+A Promise that yields an Image Blob
