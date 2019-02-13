@@ -10,13 +10,25 @@ This library allows for cross-browser image downscaling and resizing utilizing `
 
 ## Installation
 
-* `npm install browser-image-resizer`
-* `yarn add browser-image-resizer`
+### NPM/Yarn
 
-## Sample - Promises
+- `npm install browser-image-resizer`
+- `yarn add browser-image-resizer`
+
+### Browser
+
+```
+<script src="https://cdn.jsdelivr.net/npm/browser-image-resizer@1.3.0/dist/index.js"></script>
+```
+
+## Usage
+
+### NPM/Yarn
+
+#### Promises
 
 ```javascript
-import readAndCompressImage from 'browser-image-resizer';
+import { readAndCompressImage } from 'browser-image-resizer';
 
 const config = {
   quality: 0.5,
@@ -46,10 +58,10 @@ readAndCompressImage(file, config)
   });
 ```
 
-## Sample - Async/Await
+#### Async/Await
 
 ```javascript
-import readAndCompressImage from 'browser-image-resizer';
+import { readAndCompressImage } from 'browser-image-resizer';
 
 const config = {
   quality: 0.7,
@@ -82,6 +94,75 @@ async function uploadImage(file) {
 }
 ```
 
+### Browser
+
+#### Promises
+
+```javascript
+const config = {
+  quality: 0.5,
+  maxWidth: 800,
+  maxHeight: 600,
+  autoRotate: true,
+  debug: true
+};
+
+// Note: A single file comes from event.target.files on <input>
+BrowserImageResizer.readAndCompressImage(file, config)
+  .then(resizedImage => {
+    // Upload file to some Web API
+    const url = `http://localhost:3001/upload`;
+    const formData = new FormData();
+    formData.append('images', resizedImage);
+    const options = {
+      method: 'POST',
+      body: formData
+    };
+
+    return fetch(url, options);
+  })
+  .then(result => {
+    // TODO: Handle the result
+    console.log(result);
+  });
+```
+
+#### Async/Await
+
+```javascript
+
+const config = {
+  quality: 0.7,
+  width: 800,
+  height: 600
+};
+
+// Note: A single file comes from event.target.files on <input>
+async function uploadImage(file) {
+  try {
+    let resizedImage = await BrowserImageResizer.readAndCompressImage(file, config);
+
+    const url = `http://localhost:3001/upload`;
+    const formData = new FormData();
+    formData.append('images', resizedImage);
+    const options = {
+      method: 'POST',
+      body: formData
+    };
+
+    let result = await fetch(url, options);
+
+    // TODO: Handle the result
+    console.log(result);
+    return result;
+  } catch (error) {
+    console.error(error);
+    throw(error);
+  }
+}
+```
+
+
 ### readAndCompressImage(file, config) => Promise<Blob>
 
 #### Inputs
@@ -91,7 +172,7 @@ async function uploadImage(file) {
 
 | Property Name        | Purpose           | Default Value  |
 | ------------- |-------------| -----:|
-| `quality`      | The quality of the JPEG | 0.5 |
+| `quality`      | The quality of the image | 0.5 |
 | `maxWidth`      | The maximum width for the downscaled image | 800 |
 | `maxHeight` | The maximum height for the downscaled image | 600 |
 | `autoRotate` | Reads EXIF data on the image to determine orientation | true |

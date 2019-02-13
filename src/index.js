@@ -9,7 +9,7 @@ const DEFAULT_CONFIG = {
   mimeType: 'image/jpeg'
 };
 
-export default function readAndCompressImage(file, userConfig) {
+export function readAndCompressImage(file, userConfig) {
   return new Promise(resolve => {
     var img = document.createElement('img');
     var reader = new FileReader();
@@ -49,7 +49,7 @@ export default function readAndCompressImage(file, userConfig) {
   });
 }
 
-export function scaleImage(img, config, orientation = 1) {
+function scaleImage(img, config, orientation = 1) {
   var canvas = document.createElement('canvas');
   canvas.width = img.width;
   canvas.height = img.height;
