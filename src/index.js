@@ -1,4 +1,4 @@
-import EXIF from './exif';
+import ExifReader from 'exifreader';
 
 const DEFAULT_CONFIG = {
   quality: 0.5,
@@ -8,6 +8,17 @@ const DEFAULT_CONFIG = {
   debug: false,
   mimeType: 'image/jpeg'
 };
+
+function dataURItoBuffer(dataURI) {
+  var byteString = atob(dataURI.split(',')[1]);
+  var ab = new ArrayBuffer(byteString.length);
+  var ia = new Uint8Array(ab);
+  for (var i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i);
+  }
+
+  return ab;
+}
 
 export function readAndCompressImage(file, userConfig) {
   return new Promise(resolve => {
@@ -21,26 +32,15 @@ export function readAndCompressImage(file, userConfig) {
         if (config.autoRotate) {
           if (config.debug)
             console.log('browser-image-resizer: detecting image orientation...');
-          if (
-            typeof EXIF.getData === 'function' &&
-            typeof EXIF.getTag === 'function'
-          ) {
-            EXIF.getData(img, function() {
-              var orientation = EXIF.getTag(this, 'Orientation');
-              if (config.debug) {
-                console.log(
-                  'browser-image-resizer: image orientation from EXIF tag = ' +
-                    orientation
-                );
-              }
-              resolve(scaleImage(img, config, orientation));
-            });
-          } else {
-            console.error(
-              "browser-image-resizer: can't read EXIF data, the Exif.js library not found"
+          var buffer = dataURItoBuffer(img.src);
+          var { Orientation = {} } = ExifReader.load(buffer);
+          if (config.debug) {
+            console.log(
+              'browser-image-resizer: image orientation from EXIF tag = ' +
+                Orientation
             );
-            resolve (scaleImage(img, config));
           }
+          resolve(scaleImage(img, config, Orientation.value));
         }
       };
     };
@@ -236,15 +236,15 @@ function applyBilinearInterpolation(srcCanvasData, destCanvasData, scale) {
     iy0 = Math.floor(iyv);
     // Math.ceil can go over bounds
     iy1 = Math.ceil(iyv) > srcCanvasData.height - 1
-      ? srcCanvasData.height - 1
-      : Math.ceil(iyv);
+        ? srcCanvasData.height - 1
+        : Math.ceil(iyv);
     for (j = 0; j < destCanvasData.width; ++j) {
       ixv = j / scale;
       ix0 = Math.floor(ixv);
       // Math.ceil can go over bounds
       ix1 = Math.ceil(ixv) > srcCanvasData.width - 1
-        ? srcCanvasData.width - 1
-        : Math.ceil(ixv);
+          ? srcCanvasData.width - 1
+          : Math.ceil(ixv);
       idxD = (j + destCanvasData.width * i) * 4;
       // matrix to vector indices
       idxS00 = (ix0 + srcCanvasData.width * iy0) * 4;

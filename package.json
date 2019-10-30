@@ -17,5 +17,7 @@
     "build": "webpack"
   },
   "repository": "https://github.com/ericnograles/browser-image-resizer.git",
-  "dependencies": {}
+  "dependencies": {
+    "exifreader": "^2.8.3"
+  }
 }
