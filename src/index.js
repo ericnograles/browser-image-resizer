@@ -31,9 +31,15 @@ export function readAndCompressImage(file, userConfig) {
       img.onload = function() {
         if (config.autoRotate) {
           if (config.debug)
-            console.log('browser-image-resizer: detecting image orientation...');
+            console.log(
+              'browser-image-resizer: detecting image orientation...'
+            );
           var buffer = dataURItoBuffer(img.src);
-          var { Orientation = {} } = ExifReader.load(buffer);
+          let Orientation = {};
+          try {
+            const Result = ExifReader.load(buffer);
+            Orientation = Result.Orientation;
+          } catch (err) {}
           if (config.debug) {
             console.log(
               'browser-image-resizer: image orientation from EXIF tag = ' +
@@ -66,7 +72,10 @@ function scaleImage(img, config, orientation = 1) {
   }
 
   if (canvas.width > maxWidth) {
-    canvas = scaleCanvasWithAlgorithm(canvas, Object.assign(config, { outputWidth: maxWidth }));
+    canvas = scaleCanvasWithAlgorithm(
+      canvas,
+      Object.assign(config, { outputWidth: maxWidth })
+    );
   }
 
   let imageData = canvas.toDataURL(config.mimeType, config.quality);
@@ -77,20 +86,21 @@ function scaleImage(img, config, orientation = 1) {
 function findMaxWidth(config, canvas) {
   //Let's find the max available width for scaled image
   var ratio = canvas.width / canvas.height;
-  var mWidth = Math.min(canvas.width, config.maxWidth, ratio * config.maxHeight);
+  var mWidth = Math.min(
+    canvas.width,
+    config.maxWidth,
+    ratio * config.maxHeight
+  );
   if (
     config.maxSize > 0 &&
-    config.maxSize < canvas.width * canvas.height / 1000
+    config.maxSize < (canvas.width * canvas.height) / 1000
   )
     mWidth = Math.min(
       mWidth,
-      Math.floor(config.maxSize * 1000 / canvas.height)
+      Math.floor((config.maxSize * 1000) / canvas.height)
     );
   if (!!config.scaleRatio)
-    mWidth = Math.min(
-      mWidth,
-      Math.floor(config.scaleRatio * canvas.width)
-    );
+    mWidth = Math.min(mWidth, Math.floor(config.scaleRatio * canvas.width));
 
   if (config.debug) {
     console.log(
@@ -168,7 +178,10 @@ function dataURIToBlob(dataURI) {
   var byteString = atob(dataURI.split(',')[1]);
 
   // separate out the mime component
-  var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+  var mimeString = dataURI
+    .split(',')[0]
+    .split(':')[1]
+    .split(';')[0];
 
   // write the bytes of the string to an ArrayBuffer
   var ab = new ArrayBuffer(byteString.length);
@@ -235,14 +248,16 @@ function applyBilinearInterpolation(srcCanvasData, destCanvasData, scale) {
     iyv = i / scale;
     iy0 = Math.floor(iyv);
     // Math.ceil can go over bounds
-    iy1 = Math.ceil(iyv) > srcCanvasData.height - 1
+    iy1 =
+      Math.ceil(iyv) > srcCanvasData.height - 1
         ? srcCanvasData.height - 1
         : Math.ceil(iyv);
     for (j = 0; j < destCanvasData.width; ++j) {
       ixv = j / scale;
       ix0 = Math.floor(ixv);
       // Math.ceil can go over bounds
-      ix1 = Math.ceil(ixv) > srcCanvasData.width - 1
+      ix1 =
+        Math.ceil(ixv) > srcCanvasData.width - 1
           ? srcCanvasData.width - 1
           : Math.ceil(ixv);
       idxD = (j + destCanvasData.width * i) * 4;
