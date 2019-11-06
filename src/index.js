@@ -38,7 +38,7 @@ export function readAndCompressImage(file, userConfig) {
           let Orientation = {};
           try {
             const Result = ExifReader.load(buffer);
-            Orientation = Result.Orientation;
+            Orientation = Result.Orientation || {};
           } catch (err) {}
           if (config.debug) {
             console.log(
