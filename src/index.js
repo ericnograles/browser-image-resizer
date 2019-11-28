@@ -110,7 +110,7 @@ function findMaxWidth(config, canvas) {
   }
   if (mWidth <= 0) {
     mWidth = 1;
-    console.warning('browser-image-resizer: image size is too small');
+    console.warn("browser-image-resizer: image size is too small");
   }
 
   return mWidth;
