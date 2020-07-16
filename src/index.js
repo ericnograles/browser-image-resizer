@@ -47,6 +47,12 @@ export function readAndCompressImage(file, userConfig) {
             );
           }
           resolve(scaleImage(img, config, Orientation.value));
+        } else {
+          if (config.debug)
+            console.log(
+              'browser-image-resizer: ignoring EXIF orientation tag because autoRotate is false...'
+            );
+          resolve(scaleImage(img, config));
         }
       };
     };
