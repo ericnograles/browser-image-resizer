@@ -25,3 +25,8 @@ To test this locally on a web app of your choosing, you'll want to symlink this 
 1. In your test web app, execute `npm link browser-image-resizer`
 
 Now any changes (via `yarn build` above) will be reflected in your web app.
+
+### Removing Symlinks
+
+1. In your test web app, execute `npm unlink --no-save browser-image-resizer`
+1. In this directory, execute `npm unlink`
