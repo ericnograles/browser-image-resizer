@@ -13,8 +13,21 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        loader: 'babel-loader',
-        exclude: /node_modules/
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              [
+                "@babel/preset-env",
+                {
+                  "targets": {
+                    "browsers": ["last 2 versions", "ie >= 11"]
+                  }
+                }
+              ]
+            ]
+          }
+        }
       }
     ]
   }
