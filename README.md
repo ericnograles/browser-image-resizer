@@ -9,7 +9,6 @@ This library allows for cross-browser image downscaling and resizing utilizing `
 - [Code Sandbox - NPM](https://codesandbox.io/s/6x20vw7l4r)
 - [Code Sandbox - In-Browser](https://codesandbox.io/s/nroxwpn21p)
 
-
 ## Installation
 
 ### NPM/Yarn
@@ -184,3 +183,13 @@ async function uploadImage(file) {
 ### Outputs
 
 A Promise that yields an Image Blob
+
+## Known Issues
+
+### EXIF Data in iOS
+
+When using a specific camera setting in iOS, EXIF data gets stripped by default: https://stackoverflow.com/questions/57942150/file-upload-and-exif-in-mobile-safari
+
+In order for this to work, a user will need to change their iOS camera settings to "Most Compatible" as below:
+
+![image](https://user-images.githubusercontent.com/6023705/87861285-d2b6a180-c912-11ea-9c44-d29c784cb783.png)
