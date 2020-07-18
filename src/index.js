@@ -1,5 +1,7 @@
 import ExifReader from 'exifreader';
 
+let img, canvas
+
 const DEFAULT_CONFIG = {
   quality: 0.5,
   maxWidth: 800,
@@ -10,21 +12,35 @@ const DEFAULT_CONFIG = {
 };
 
 function dataURItoBuffer(dataURI) {
-  var byteString = atob(dataURI.split(',')[1]);
-  var ab = new ArrayBuffer(byteString.length);
-  var ia = new Uint8Array(ab);
-  for (var i = 0; i < byteString.length; i++) {
+  let byteString = atob(dataURI.split(',')[1]);
+  let ab = new ArrayBuffer(byteString.length);
+  let ia = new Uint8Array(ab);
+  for (let i = 0; i < byteString.length; i++) {
     ia[i] = byteString.charCodeAt(i);
   }
 
   return ab;
 }
 
+function initializeOrGetImg () {
+  if (!img) {
+    img = document.createElement('img');
+  }
+  return img
+}
+
+function initializeOrGetCanvas () {
+  if (!canvas) {
+    canvas = document.createElement('canvas');
+  }
+  return canvas
+}
+
 export function readAndCompressImage(file, userConfig) {
   return new Promise(resolve => {
-    var img = document.createElement('img');
-    var reader = new FileReader();
-    var config = Object.assign({}, DEFAULT_CONFIG, userConfig);
+    let img = initializeOrGetImg()
+    let reader = new FileReader();
+    let config = Object.assign({}, DEFAULT_CONFIG, userConfig);
 
     reader.onload = function(e) {
       img.src = e.target.result;
@@ -34,7 +50,7 @@ export function readAndCompressImage(file, userConfig) {
             console.log(
               'browser-image-resizer: detecting image orientation...'
             );
-          var buffer = dataURItoBuffer(img.src);
+          let buffer = dataURItoBuffer(img.src);
           let Orientation = {};
           try {
             const Result = ExifReader.load(buffer);
@@ -62,10 +78,10 @@ export function readAndCompressImage(file, userConfig) {
 }
 
 function scaleImage(img, config, orientation = 1) {
-  var canvas = document.createElement('canvas');
+  let canvas = initializeOrGetCanvas()
   canvas.width = img.width;
   canvas.height = img.height;
-  var ctx = canvas.getContext('2d');
+  let ctx = canvas.getContext('2d');
   ctx.save();
 
   // EXIF
@@ -91,8 +107,8 @@ function scaleImage(img, config, orientation = 1) {
 
 function findMaxWidth(config, canvas) {
   //Let's find the max available width for scaled image
-  var ratio = canvas.width / canvas.height;
-  var mWidth = Math.min(
+  let ratio = canvas.width / canvas.height;
+  let mWidth = Math.min(
     canvas.width,
     config.maxWidth,
     ratio * config.maxHeight
@@ -133,10 +149,10 @@ function findMaxWidth(config, canvas) {
 }
 
 function exifApplied(canvas, ctx, orientation, img) {
-  var width = canvas.width;
-  var styleWidth = canvas.style.width;
-  var height = canvas.height;
-  var styleHeight = canvas.style.height;
+  let width = canvas.width;
+  let styleWidth = canvas.style.width;
+  let height = canvas.height;
+  let styleHeight = canvas.style.height;
   if (orientation > 4) {
     canvas.width = height;
     canvas.style.width = styleHeight;
@@ -181,42 +197,42 @@ function exifApplied(canvas, ctx, orientation, img) {
 function dataURIToBlob(dataURI) {
   // convert base64 to raw binary data held in a string
   // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
-  var byteString = atob(dataURI.split(',')[1]);
+  let byteString = atob(dataURI.split(',')[1]);
 
   // separate out the mime component
-  var mimeString = dataURI
+  let mimeString = dataURI
     .split(',')[0]
     .split(':')[1]
     .split(';')[0];
 
   // write the bytes of the string to an ArrayBuffer
-  var ab = new ArrayBuffer(byteString.length);
+  let ab = new ArrayBuffer(byteString.length);
 
   // create a view into the buffer
-  var ia = new Uint8Array(ab);
+  let ia = new Uint8Array(ab);
 
   // set the bytes of the buffer to the correct values
-  for (var i = 0; i < byteString.length; i++) {
+  for (let i = 0; i < byteString.length; i++) {
     ia[i] = byteString.charCodeAt(i);
   }
 
   // write the ArrayBuffer to a blob, and you're done
-  var blob = new Blob([ab], { type: mimeString });
+  let blob = new Blob([ab], { type: mimeString });
   return blob;
 }
 
 function scaleCanvasWithAlgorithm(canvas, config) {
-  var scaledCanvas = document.createElement('canvas');
+  let scaledCanvas = document.createElement('canvas');
 
-  var scale = config.outputWidth / canvas.width;
+  let scale = config.outputWidth / canvas.width;
 
   scaledCanvas.width = canvas.width * scale;
   scaledCanvas.height = canvas.height * scale;
 
-  var srcImgData = canvas
+  let srcImgData = canvas
     .getContext('2d')
     .getImageData(0, 0, canvas.width, canvas.height);
-  var destImgData = scaledCanvas
+  let destImgData = scaledCanvas
     .getContext('2d')
     .createImageData(scaledCanvas.width, scaledCanvas.height);
 
@@ -228,7 +244,7 @@ function scaleCanvasWithAlgorithm(canvas, config) {
 }
 
 function getHalfScaleCanvas(canvas) {
-  var halfCanvas = document.createElement('canvas');
+  let halfCanvas = document.createElement('canvas');
   halfCanvas.width = canvas.width / 2;
   halfCanvas.height = canvas.height / 2;
 
@@ -241,15 +257,15 @@ function getHalfScaleCanvas(canvas) {
 
 function applyBilinearInterpolation(srcCanvasData, destCanvasData, scale) {
   function inner(f00, f10, f01, f11, x, y) {
-    var un_x = 1.0 - x;
-    var un_y = 1.0 - y;
+    let un_x = 1.0 - x;
+    let un_y = 1.0 - y;
     return f00 * un_x * un_y + f10 * x * un_y + f01 * un_x * y + f11 * x * y;
   }
-  var i, j;
-  var iyv, iy0, iy1, ixv, ix0, ix1;
-  var idxD, idxS00, idxS10, idxS01, idxS11;
-  var dx, dy;
-  var r, g, b, a;
+  let i, j;
+  let iyv, iy0, iy1, ixv, ix0, ix1;
+  let idxD, idxS00, idxS10, idxS01, idxS11;
+  let dx, dy;
+  let r, g, b, a;
   for (i = 0; i < destCanvasData.height; ++i) {
     iyv = i / scale;
     iy0 = Math.floor(iyv);
