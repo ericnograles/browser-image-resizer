@@ -20,7 +20,7 @@ This library allows for cross-browser image downscaling and resizing utilizing `
 ### Browser
 
 ```
-<script src="https://cdn.jsdelivr.net/gh/ericnograles/browser-image-resizer@2.1.2/dist/index.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/ericnograles/browser-image-resizer@2.1.3/dist/index.js"></script>
 ```
 
 ## Usage
