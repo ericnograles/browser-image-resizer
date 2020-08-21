@@ -37,13 +37,15 @@ function initializeOrGetCanvas () {
 }
 
 export function readAndCompressImage(file, userConfig) {
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     let img = initializeOrGetImg()
     let reader = new FileReader();
     let config = Object.assign({}, DEFAULT_CONFIG, userConfig);
 
     reader.onload = function(e) {
-      img.src = e.target.result;
+      img.onerror = function() {
+        reject("cannot load image.");
+      }
       img.onload = function() {
         if (config.autoRotate) {
           if (config.debug)
@@ -71,7 +73,12 @@ export function readAndCompressImage(file, userConfig) {
           resolve(scaleImage(img, config));
         }
       };
+      img.src = e.target.result;
     };
+
+    reader.onerror = function() {
+      reject("cannot read image file.");
+    }
 
     reader.readAsDataURL(file);
   });
