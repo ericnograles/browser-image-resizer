@@ -177,8 +177,8 @@ function exifApplied(canvas, ctx, orientation, img) {
       ctx.scale(1, -1);
       break;
     case 6:
-      ctx.rotate(0.5 * Math.PI);
-      ctx.translate(0, -height);
+      ctx.rotate(-0.5 * Math.PI);
+      ctx.translate(-width, 0);
       break;
     case 7:
       ctx.rotate(0.5 * Math.PI);
@@ -186,8 +186,8 @@ function exifApplied(canvas, ctx, orientation, img) {
       ctx.scale(-1, 1);
       break;
     case 8:
-      ctx.rotate(-0.5 * Math.PI);
-      ctx.translate(-width, 0);
+      ctx.rotate(0.5 * Math.PI);
+      ctx.translate(0, -height);
       break;
   }
   ctx.drawImage(img, 0, 0);
