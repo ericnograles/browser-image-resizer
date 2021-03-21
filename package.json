@@ -14,8 +14,8 @@
     "webpack-cli": "^3.2.3"
   },
   "scripts": {
-    "build": "webpack --mode=production",
-    "dev": "webpack --watch"
+    "build": "NODE_ENV=production webpack --mode=production",
+    "dev": "webpack --watch --mode=development"
   },
   "repository": "https://github.com/ericnograles/browser-image-resizer.git",
   "dependencies": {
