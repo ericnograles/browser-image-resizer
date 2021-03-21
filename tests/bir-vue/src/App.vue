@@ -1,8 +1,7 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
     <input type="file" accept="image/*" @change="onChange" />
-    <img :src="image" alt="compressed-image-output" />
+    <img v-if="image" :src="image" alt="compressed-image-output" />
   </div>
 </template>
 
@@ -11,16 +10,27 @@ import { readAndCompressImage } from "browser-image-resizer";
 
 export default {
   name: 'App',
-  data () {
+  data() {
     return {
-      image: null
+      image: null,
     }
   },
   methods: {
-    onChange (e) {
-      console.log(e)
-    }
-  }
+    async onChange(event) {
+      let image = await readAndCompressImage(event.target.files[0]);
+      let base64Image = await this.convertToBase64(image);
+      this.image = base64Image;
+    },
+    convertToBase64(imageBlob) {
+      return new Promise((resolve) => {
+        var reader = new FileReader()
+        reader.onload = function() {
+          resolve(reader.result)
+        }
+        reader.readAsDataURL(imageBlob)
+      })
+    },
+  },
 }
 </script>
 
@@ -32,5 +42,8 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 </style>
