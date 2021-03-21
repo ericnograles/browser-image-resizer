@@ -8,14 +8,13 @@ Thanks for helping to shake out any issues with this library! The setup is very 
 
 ### Prerequisites
 
-- Node.js LTS
-- `npm i -g yarn`
+- Node.js 14.16.0 and above
 
 ### Setup
 
 1. Clone this repo
-1. `yarn install`
-1. `yarn build` to generate the dist/index.js file
+1. `npm i`
+1. `npm run build` to generate the dist/index.js file
 
 ### Symlinking
 
@@ -24,7 +23,7 @@ To test this locally on a web app of your choosing, you'll want to symlink this 
 1. In this directory, execute `npm link`
 1. In your test web app, execute `npm link browser-image-resizer`
 
-Now any changes (via `yarn build` above) will be reflected in your web app.
+Now any changes (via `npm run build` above) will be reflected in your web app.
 
 ### Removing Symlinks
 
