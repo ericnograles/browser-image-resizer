@@ -1,7 +1,9 @@
 <template>
   <div id="app">
-    <input type="file" accept="image/*" @change="onChange" />
-    <img v-if="image" :src="image" alt="compressed-image-output" />
+    <input type="file" accept="image/*" @change="onChange" multiple />
+    <div v-if="images.length > 0">
+      <img v-for="(image, index) in images" :key="`img_${index}`" :src="image" alt="compressed-image-output" />
+    </div>
   </div>
 </template>
 
@@ -12,14 +14,20 @@ export default {
   name: 'App',
   data() {
     return {
-      image: null,
+      images: [],
     }
   },
   methods: {
     async onChange(event) {
-      let image = await readAndCompressImage(event.target.files[0]);
+      let convertImages = Array.from(event.target.files)
+        .map(file => this.readImageAndConvertToBase64(file))
+      let images = await Promise.all(convertImages)
+      this.images = images
+    },
+    async readImageAndConvertToBase64(file) {
+      let image = await readAndCompressImage(file);
       let base64Image = await this.convertToBase64(image);
-      this.image = base64Image;
+      return base64Image
     },
     convertToBase64(imageBlob) {
       return new Promise((resolve) => {
