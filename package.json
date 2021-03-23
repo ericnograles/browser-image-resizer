@@ -1,6 +1,6 @@
 {
   "name": "browser-image-resizer",
-  "version": "2.1.3",
+  "version": "2.2.0",
   "description": "A browser-based utility to downscale and resize images using <canvas>",
   "main": "dist/index.js",
   "author": "Eric Nograles <grales@gmail.com>",
@@ -14,7 +14,8 @@
     "webpack-cli": "^3.2.3"
   },
   "scripts": {
-    "build": "webpack --mode=production"
+    "build": "NODE_ENV=production webpack --mode=production",
+    "dev": "webpack --watch --mode=development"
   },
   "repository": "https://github.com/ericnograles/browser-image-resizer.git",
   "dependencies": {
