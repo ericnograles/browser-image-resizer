@@ -19,7 +19,9 @@ export function readAndCompressImage(file, userConfig) {
     let config = Object.assign({}, DEFAULT_CONFIG, userConfig);
 
     reader.onload = function(e) {
-      img.src = e.target.result;
+      img.onerror = function() {
+        reject("cannot load image.");
+      }
       img.onload = function() {
         let scaleImageOptions = { img, config }
         if (config.autoRotate) {
@@ -55,9 +57,13 @@ export function readAndCompressImage(file, userConfig) {
           reject(err) 
         }
       };
+      img.src = e.target.result;
     };
 
     try {
+      reader.onerror = function() {
+        reject("cannot read image file.");
+      }
       reader.readAsDataURL(file);
     } catch (err) {
       reject(err)
