@@ -193,3 +193,25 @@ When using a specific camera setting in iOS, EXIF data gets stripped by default:
 In order for this to work, a user will need to change their iOS camera settings to "Most Compatible" as below:
 
 ![image](https://user-images.githubusercontent.com/6023705/87861285-d2b6a180-c912-11ea-9c44-d29c784cb783.png)
+
+## Contributing
+
+The fastest way to contribute back is to fork the repl.it of this repo (https://replit.com/@grales/browser-image-resizer). Please open any Issues if you have trouble spinning it up.
+
+### repl.it First-time Setup
+
+Upon forking of the repl.it, open a new Shell and follow these instructions:
+
+1. Execute `npm link` at the top `~/browser-image-resizer` folder
+1. Execute `cd tests/bir-vue`
+2. Execute `npm i && npm link browser-image-resizer && npm run serve`
+3. Your repl.it should automatically boot to a webview of a Vue 3 CLI SPA
+  - This SPA will point to your built copy of browser-image-resizer that runs automatically when the repl.it boots
+4. Modify any code at the top level `src/` and it will reflect on your Vue 3 CLI SPA test app
+
+### repl.it Specifics
+
+-  The repl.it above is configured to run the `dev` script of the library, which is a webpack-dev-server that auto-generates the `dist/` library which is the entry point of this library
+- The subsequent commands gives you an actual web application on which to verify your changes
+- If you prefer, you can do this locally as well, but the repl.it ensures a faster and more consistent onboarding
+   

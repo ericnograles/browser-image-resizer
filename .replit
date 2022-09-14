@@ -1,15 +1,6 @@
-entrypoint = "index.js"
 
 hidden = [".config"]
-
-[interpreter]
-command = [
-    "prybar-nodejs",
-    "-q",
-    "--ps1",
-    "\u0001\u001b[33m\u0002\u0001\u001b[00m\u0002 ",
-    "-i"
-]
+run = "npm i && npm run dev"
 
 [[hints]]
 regex = "Error \\[ERR_REQUIRE_ESM\\]"
