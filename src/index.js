@@ -1,7 +1,6 @@
 import ExifReader from 'exifreader';
 import { initializeOrGetImg } from './browser_operations';
 import { scaleImage } from './scaling_operations';
-import { dataURItoBuffer } from './data_operations';
 
 const DEFAULT_CONFIG = {
   quality: 0.5,
@@ -14,7 +13,7 @@ const DEFAULT_CONFIG = {
 
 export function readAndCompressImage(file, userConfig) {
   return new Promise((resolve, reject) => {
-    let img = initializeOrGetImg()
+    let img = initializeOrGetImg();
     let reader = new FileReader();
     let config = Object.assign({}, DEFAULT_CONFIG, userConfig);
 
@@ -29,10 +28,9 @@ export function readAndCompressImage(file, userConfig) {
             console.log(
               'browser-image-resizer: detecting image orientation...'
             );
-          let buffer = dataURItoBuffer(img.src);
           let Orientation = {};
           try {
-            const Result = ExifReader.load(buffer);
+            const Result = ExifReader.load(file);
             Orientation = Result.Orientation || {};
           } catch (err) {
             console.error('browser-image-resizer: Error getting orientation')
@@ -51,7 +49,7 @@ export function readAndCompressImage(file, userConfig) {
             );
         }
         try {
-          let blob = scaleImage(scaleImageOptions)
+          let blob = scaleImage(scaleImageOptions);
           resolve(blob)
         } catch (err) {
           reject(err) 

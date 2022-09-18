@@ -19,6 +19,6 @@
   },
   "repository": "https://github.com/ericnograles/browser-image-resizer.git",
   "dependencies": {
-    "exifreader": "^3.1.0"
+    "exifreader": "^4.5.1"
   }
 }
