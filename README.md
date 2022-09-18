@@ -184,16 +184,6 @@ async function uploadImage(file) {
 
 A Promise that yields an Image Blob
 
-## Known Issues
-
-### EXIF Data in iOS
-
-When using a specific camera setting in iOS, EXIF data gets stripped by default: https://stackoverflow.com/questions/57942150/file-upload-and-exif-in-mobile-safari
-
-In order for this to work, a user will need to change their iOS camera settings to "Most Compatible" as below:
-
-![image](https://user-images.githubusercontent.com/6023705/87861285-d2b6a180-c912-11ea-9c44-d29c784cb783.png)
-
 ## Contributing
 
 The fastest way to contribute back is to fork the repl.it of this repo (https://replit.com/@grales/browser-image-resizer). Please open any Issues if you have trouble spinning it up.
