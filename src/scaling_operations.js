@@ -209,6 +209,8 @@ export function scaleImage({ img, config, orientation = 1 } = {}) {
   canvas.width = img.width;
   canvas.height = img.height;
   let ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
   ctx.save();
 
   // EXIF
