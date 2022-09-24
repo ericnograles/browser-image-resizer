@@ -209,9 +209,12 @@ export function scaleImage({ img, config, orientation = 1 } = {}) {
   canvas.width = img.width;
   canvas.height = img.height;
   let ctx = canvas.getContext('2d');
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.save();
+  if (config.mimeType === 'image/jpeg') {
+    // Only apply to JPEGs, white background default, see #42 and #66
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.save();
+  }
 
   // EXIF
   exifApplied(canvas, ctx, orientation, img);
