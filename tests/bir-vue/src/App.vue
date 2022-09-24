@@ -25,7 +25,7 @@ export default {
       this.images = images
     },
     async readImageAndConvertToBase64(file) {
-      let image = await readAndCompressImage(file);
+      let image = await readAndCompressImage(file, { mimeType: 'image/jpeg'} );
       let base64Image = await this.convertToBase64(image);
       return base64Image
     },
