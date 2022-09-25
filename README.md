@@ -1,8 +1,10 @@
 # browser-image-resizer
 
+A tiny (~7kb ) browser-based library to downscale and/or resize images using `<canvas>`.
+
 ## Introduction
 
-This library allows for cross-browser image downscaling and resizing utilizing `<canvas>`. The code was part of Ross Turner's [HTML5-ImageUploader](https://github.com/rossturner/HTML5-ImageUploader).  Note that this is meant to be a browser-only utility and will not work in Node.js.
+The code was part of Ross Turner's [HTML5-ImageUploader](https://github.com/rossturner/HTML5-ImageUploader).  Note that this is meant to be a browser-only utility and will not work in Node.js.
 
 ## Demo
 
@@ -35,7 +37,6 @@ const config = {
   quality: 0.5,
   maxWidth: 800,
   maxHeight: 600,
-  autoRotate: true,
   debug: true
 };
 
@@ -104,7 +105,6 @@ const config = {
   quality: 0.5,
   maxWidth: 800,
   maxHeight: 600,
-  autoRotate: true,
   debug: true
 };
 
