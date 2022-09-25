@@ -44,52 +44,6 @@ function findMaxWidth(config, canvas) {
   return mWidth;
 }
 
-function exifApplied(canvas, ctx, orientation, img) {
-  let width = canvas.width;
-  let styleWidth = canvas.style.width;
-  let height = canvas.height;
-  let styleHeight = canvas.style.height;
-  if (orientation > 4) {
-    canvas.width = height;
-    canvas.style.width = styleHeight;
-    canvas.height = width;
-    canvas.style.height = styleWidth;
-  }
-  switch (orientation) {
-    case 2:
-      ctx.translate(width, 0);
-      ctx.scale(-1, 1);
-      break;
-    case 3:
-      ctx.translate(width, height);
-      ctx.rotate(Math.PI);
-      break;
-    case 4:
-      ctx.translate(0, height);
-      ctx.scale(1, -1);
-      break;
-    case 5:
-      ctx.rotate(0.5 * Math.PI);
-      ctx.scale(1, -1);
-      break;
-    case 6:
-      ctx.rotate(0.5 * Math.PI);
-      ctx.translate(0, -height);
-      break;
-    case 7:
-      ctx.rotate(0.5 * Math.PI);
-      ctx.translate(width, -height);
-      ctx.scale(-1, 1);
-      break;
-    case 8:
-      ctx.rotate(-0.5 * Math.PI);
-      ctx.translate(-width, 0);
-      break;
-  }
-  ctx.drawImage(img, 0, 0);
-  ctx.restore();
-}
-
 function scaleCanvasWithAlgorithm(canvas, config) {
   let scaledCanvas = document.createElement('canvas');
 
@@ -217,7 +171,8 @@ export function scaleImage({ img, config, orientation = 1 } = {}) {
   }
 
   // EXIF
-  exifApplied(canvas, ctx, orientation, img);
+  ctx.drawImage(img, 0, 0);
+  ctx.restore();
 
   let maxWidth = findMaxWidth(config, canvas);
 
