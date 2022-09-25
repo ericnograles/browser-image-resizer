@@ -21,7 +21,7 @@ The code was part of Ross Turner's [HTML5-ImageUploader](https://github.com/ross
 ### Browser
 
 ```
-<script src="https://cdn.jsdelivr.net/gh/ericnograles/browser-image-resizer@2.2.0/dist/index.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/ericnograles/browser-image-resizer@2.4.0/dist/index.js"></script>
 ```
 
 ## Usage
