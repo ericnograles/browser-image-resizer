@@ -1,6 +1,6 @@
 # browser-image-resizer
 
-A tiny (~7kb ) browser-based library to downscale and/or resize images using `<canvas>`.
+A tiny (~7kb uncompressed, ~1kb compressed) browser-based library to downscale and/or resize images using `<canvas>`.
 
 ## Introduction
 
