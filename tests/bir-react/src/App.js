@@ -9,7 +9,7 @@ export default class App extends Component {
   };
 
   onChange = async event => {
-    let image = await readAndCompressImage(event.target.files[0], { mimeType: 'image/jpeg'});
+    let image = await readAndCompressImage(event.target.files[0], { mimeType: 'image/jpeg', debug: true });
     let base64Image = await this.convertToBase64(image);
     this.setState({ image: base64Image });
   };

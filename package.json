@@ -17,8 +17,5 @@
     "build": "NODE_ENV=production webpack --mode=production",
     "dev": "webpack --watch --mode=development"
   },
-  "repository": "https://github.com/ericnograles/browser-image-resizer.git",
-  "dependencies": {
-    "exifreader": "^4.5.1"
-  }
+  "repository": "https://github.com/ericnograles/browser-image-resizer.git"
 }

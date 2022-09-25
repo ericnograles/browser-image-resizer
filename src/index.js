@@ -1,4 +1,3 @@
-import ExifReader from 'exifreader';
 import { initializeOrGetImg } from './browser_operations';
 import { scaleImage } from './scaling_operations';
 
@@ -23,31 +22,6 @@ export function readAndCompressImage(file, userConfig) {
       }
       img.onload = function() {
         let scaleImageOptions = { img, config }
-        if (config.autoRotate) {
-          if (config.debug)
-            console.log(
-              'browser-image-resizer: detecting image orientation...'
-            );
-          let Orientation = {};
-          try {
-            const Result = ExifReader.load(file);
-            Orientation = Result.Orientation || {};
-          } catch (err) {
-            console.error('browser-image-resizer: Error getting orientation')
-            console.error(err)
-          }
-          if (config.debug) {
-            console.log(
-              'browser-image-resizer: image orientation from EXIF tag = ' +
-                Orientation
-            );
-          }
-          scaleImageOptions.orientation = Orientation.value
-        } else if (config.debug) {
-            console.log(
-              'browser-image-resizer: ignoring EXIF orientation tag because autoRotate is false...'
-            );
-        }
         try {
           let blob = scaleImage(scaleImageOptions);
           resolve(blob)
